@@ -1,11 +1,12 @@
-import Telegraf, { ContextMessageUpdate, Stage } from 'telegraf'
+import { Telegraf, Scenes } from 'telegraf'
 import { SCENE } from '../const/sceneId'
 import main from '../scenes/main'
-import addTeam from '../scenes/addTeam'
-import uploadDocument from '../scenes/uploadDocument'
+import { PEContext } from '../types/custom-context'
+import { RegisterScene } from '../scenes/RegisterScene'
+import { UserMainScene } from '../scenes/UserMainScene'
 
-export function setupStage<T extends ContextMessageUpdate>(bot: Telegraf<T>) {
-    const stage = new Stage([main, addTeam, uploadDocument], { default: SCENE.MAIN })
+export function setupStage(bot: Telegraf<PEContext>) {
+  const stage = new Scenes.Stage<PEContext>([main, RegisterScene, UserMainScene], { default: SCENE.DEFAULT })
 
-    bot.use(stage.middleware())
+  bot.use(stage.middleware())
 }
