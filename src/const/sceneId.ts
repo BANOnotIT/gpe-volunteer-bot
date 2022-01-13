@@ -1,6 +1,7 @@
 export enum SCENE {
-    MAIN = 'main',
-    REFERRAL_REGISTER = 'referral_register',
-    TEAM_ADD = 'addTeam',
-    UPLOAD_DOCUMENT = 'upload_document'
+  DEFAULT = 'default',
+  USER_MAIN = 'user_main',
+  REGISTER_ON_EVENT = 'register_on_event',
+  CREATE_EVENT = 'create_event',
+  EDIT_EVENT = 'edit_event'
 }
