@@ -1,12 +1,13 @@
-import { ContextMessageUpdate, Middleware } from 'telegraf'
+import { Middleware } from 'telegraf'
 import phrases from '../helpers/strings'
+import { PEContext } from '../types/custom-context'
 
-const middleware: Middleware<ContextMessageUpdate> = async (ctx, next) => {
-    if (ctx.user?.team.isAdmin) {
-        return next()
-    }
+const middleware: Middleware<PEContext> = async (ctx, next) => {
+  if (ctx.chat.id === ctx.config.telegram.adminChatId) {
+    return next()
+  }
 
-    await ctx.reply(phrases.system.accessDenied())
-    await ctx.scene.leave()
+  await ctx.reply(phrases.system.accessDenied())
+  await ctx.scene.leave()
 }
 export default middleware
