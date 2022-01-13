@@ -1,51 +1,11 @@
 {
-  "milestones": [
-    {
-      "slug": "application",
-      "title": "Заявка на проект"
-    },
-    {
-      "slug": "workshop prepare",
-      "title": "Подготовка к мастерской"
-    },
-    {
-      "slug": "project concept",
-      "title": "Концепция проекта"
-    },
-    {
-      "slug": "passport",
-      "title": "Паспорт"
-    }
-  ],
-  "upload": {
-    "allowedMIMEs": [
-      "application/vnd.openxmlformats-officedocument.presentationml.presentation",
-      "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-      "application/vnd.google-apps.presentation",
-      "application/vnd.google-apps.document",
-      "application/vnd.google-apps.spreadsheet",
-      "application/pdf"
-    ],
-    "fileMask": "{milestoneTitle} v{versionNumber}"
-  },
   "server": {
     "port": "!! FROM ENV !!"
   },
   "telegram": {
     "webhook": null,
-    "token": "!! FROM ENV !!"
-  },
-  "gdrive": {
-    "serviceAccount": "!! JSON FROM ENV !!",
-    "rootDirId": "1S2S2tfTRGjhJTSBI0Jh7c_ohWXrMiavA"
-  },
-  "trello": {
-    "boardId": "5f860c7830ee4b5715b5e0c0",
-    "appKey:token": "!! FROM ENV !!"
-  },
-  "sentry": {
-    "dsn": "!! FROM ENV !!"
+    "token": "!! FROM ENV !!",
+    "adminChatId": "!! FROM ENV !!"
   },
   "redis": "!! FROM ENV !!",
   "database": "!! EXTENDED !!"
