@@ -7,6 +7,8 @@ import { setupStage } from './helpers/stage'
 import bindConfig from './helpers/bindConfig'
 import { BotConfig } from 'bot-config'
 import { PEContext } from './types/custom-context'
+import { Application } from './models/Application'
+import { Event } from './models/Event'
 
 const config = require('config') as BotConfig
 const debug = require('debug')('bot')
@@ -15,8 +17,8 @@ async function setupDb(): Promise<Connection> {
   return createConnection({
     type: 'postgres',
     url: config.database.connection,
-    migrationsRun: true,
-    migrations: ['migrations/*.js']
+    synchronize: true,
+    entities: [Application, Event]
   })
 }
 
@@ -41,12 +43,13 @@ async function setupBot() {
       port: +config.server.port,
       hookPath: webhook.pathname
     }
-    debug('Bot started with WebHook on ' + webhook.href)
   }
 
   await bot.launch({
     webhook: webhookConfig
   })
+  if (webhookConfig) debug('Bot started with WebHook on ' + config.telegram.webhook)
+  else debug('Bot started with longpoll')
 }
 
 Promise.resolve()
