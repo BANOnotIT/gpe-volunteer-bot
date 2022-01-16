@@ -14,5 +14,7 @@ async function replyWithMainView(ctx: PEContext) {
     // Markup.button.text(phrases.user.btns.info()),
     Markup.button.text(phrases.user.btns.register())
   ])
+    .resize(true)
+    .oneTime(true)
   await ctx.reply(phrases.user.greet(), keyboard)
 }

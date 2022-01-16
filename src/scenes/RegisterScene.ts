@@ -36,12 +36,12 @@ const finalStep = new Composer<PEContext>()
       ]).reply_markup
     })
 
-    await ctx.reply(phrases.register.final())
+    await ctx.editMessageText(phrases.register.final())
 
     return ctx.scene.enter(SCENE.DEFAULT)
   })
   .action('no', async (ctx) => {
-    await ctx.reply(phrases.register.confirm.restart())
+    await ctx.editMessageText(phrases.register.confirm.restart())
     ctx.wizard.selectStep(0)
     return ctx.scene.reenter()
   })
