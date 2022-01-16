@@ -1,6 +1,6 @@
 import lodash from 'lodash'
 import format from 'string-template'
-import { GREEN_MARK, RED_CROSS, WHITE_QUESTION_MARK } from '../const/emojies'
+import { GREEN_MARK, RED_CROSS } from '../const/emojies'
 
 type TemplateProcessor = (values?: { [key: string]: string }) => string
 type InstrumentedStringTree<T> = {
@@ -41,6 +41,14 @@ const strings = {
       register: 'Хочу зарегистрироваться'
     }
   },
+  admin: {
+    greet: 'Команды которые я умею обрабатывать:' + '\n/add ― для добавления мероприятия на регистрацию',
+    // '\n/edit ― для изменения мероприятий',
+    btns: {
+      info: 'Что надо будет делать?',
+      create: 'Создать мероприятие'
+    }
+  },
   system: {
     accessDenied: 'Я не знаю такую команду...'
   },
@@ -61,12 +69,20 @@ const strings = {
   },
   approve: {
     approveText__html: 'Принимаем <b>{user}</b>?',
-    approveBtn: 'Да',
-    disapproveBtn: 'Нет'
+    resolution: {
+      approved__html: `{user} ${GREEN_MARK} {date}`,
+      denied__html: `{user} ${RED_CROSS}`
+    },
+    approveBtn: `Да ${GREEN_MARK}`,
+    denyBtn: `Нет ${RED_CROSS}`,
+    notice: {
+      approved: `Заявка на {date} была принята! ${GREEN_MARK}`,
+      denied: `Заявка на {date} была отклонена ${RED_CROSS}`
+    }
   },
   register: {
     choseEvent: 'Выбери на какое записываешься?',
-    choseEventChosen__html: 'Выбери на какое записываешься?\n<b>{event}</b>',
+    choseEventChosen: 'Выбери на какое записываешься?\n{event}\n\n{description}',
     enterName: 'Введи своё имя',
     enterMidname: 'Введи своё отчество',
     enterSurname: 'Введи свою фамилию',
@@ -80,6 +96,19 @@ const strings = {
       restart: 'По-новой так по-новой...'
     },
     final: 'Заявка принята на рассмотрение. Я напишу, если она будет принята или если будут проблемы.'
+  },
+  eventCreate: {
+    enterDate: 'Введите дату',
+    enterTimeSpan__html: 'Введите промежуток времени в формате <code>{format}</code>',
+    wrongFormat__html: 'Не могу понять, что это. Попробуйте ещё раз с соблюдением формата <code>{format}</code>',
+    enterDescription: 'Введите описание. Оно будет показываться пользователям при регистрации',
+    confirm: {
+      text: 'Данные верны?',
+      yes: 'Да, данные верны',
+      no: 'Нет, давай по-новой',
+      restart: 'По-новой так по-новой...'
+    },
+    final: 'Мероприятие сохранено и на него теперь можно регистрироваться.'
   },
   errors: {
     notText: 'К сожалению, я не понимаю. Введите значение текстом'

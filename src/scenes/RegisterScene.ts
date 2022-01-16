@@ -11,13 +11,13 @@ const finalStep = new Composer<PEContext>()
     const appRepo = getRepository(Application)
     const eventRepo = getRepository(Event)
 
-    const event = await eventRepo.findOne(ctx.scene.session.eventId!)
+    const event = await eventRepo.findOne(ctx.scene.session.application.eventId!)
 
     const application = new Application()
-    application.firstname = ctx.scene.session.firstname
-    application.midname = ctx.scene.session.midname
-    application.surname = ctx.scene.session.surname
-    application.groupCode = ctx.scene.session.groupCode
+    application.firstname = ctx.scene.session.application.firstname
+    application.midname = ctx.scene.session.application.midname
+    application.surname = ctx.scene.session.application.surname
+    application.groupCode = ctx.scene.session.application.groupCode
     application.tgId = ctx.chat.id
     application.createdAt = new Date()
     application.event = event
@@ -25,14 +25,14 @@ const finalStep = new Composer<PEContext>()
     await appRepo.save(application)
 
     let adminId = ctx.config.telegram.adminChatId
-    const msg = await ctx.telegram.forwardMessage(adminId, ctx.chat.id, ctx.scene.session.vaccineMessageId)
+    const msg = await ctx.telegram.forwardMessage(adminId, ctx.chat.id, ctx.scene.session.application.vaccineMessageId)
 
     await ctx.telegram.sendMessage(adminId, phrases.approve.approveText__html({ user: application.represent() }), {
       reply_to_message_id: msg.message_id,
       parse_mode: 'HTML',
       reply_markup: Markup.inlineKeyboard([
         Markup.button.callback(phrases.approve.approveBtn(), `approve#${application.id}`),
-        Markup.button.callback(phrases.approve.disapproveBtn(), `deny#${application.id}`)
+        Markup.button.callback(phrases.approve.denyBtn(), `deny#${application.id}`)
       ]).reply_markup
     })
 
@@ -56,15 +56,17 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
       .where('event.status <> :status', { status: EventState.closed })
       .getMany()
 
-    const eventButtons = events.map((event) => Markup.button.callback(event.represent(), `event#${event.id}`))
+    const eventButtons = events.map((event) => [Markup.button.callback(event.represent(), `event#${event.id}`)])
     await ctx.reply(phrases.register.choseEvent(), Markup.inlineKeyboard(eventButtons))
+
+    ctx.scene.session.application = {}
 
     return ctx.wizard.next()
   },
 
   Composer.action<PEContext>(/^event#(\d+)$/, async (ctx) => {
     let eventId = Number(ctx.match[1])
-    ctx.scene.session.eventId = eventId
+    ctx.scene.session.application.eventId = eventId
 
     const eventRepo = getRepository(Event)
     const event = await eventRepo.findOne(eventId)
@@ -73,16 +75,16 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
       return ctx.wizard.back()
     }
 
-    await ctx.editMessageText(phrases.register.choseEventChosen__html({ event: event.represent() }), {
-      parse_mode: 'HTML'
-    })
+    await ctx.editMessageText(
+      phrases.register.choseEventChosen({ event: event.represent(), description: event.description })
+    )
 
     await ctx.reply(phrases.register.enterName())
     return ctx.wizard.next()
   }),
 
   Composer.on<PEContext, 'text'>('text', async (ctx) => {
-    ctx.scene.session.firstname = ctx.message.text
+    ctx.scene.session.application.firstname = ctx.message.text
 
     await ctx.reply(phrases.register.enterMidname())
 
@@ -90,7 +92,7 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
   }),
 
   Composer.on<PEContext, 'text'>('text', async (ctx) => {
-    ctx.scene.session.midname = ctx.message.text
+    ctx.scene.session.application.midname = ctx.message.text
 
     await ctx.reply(phrases.register.enterSurname())
 
@@ -98,7 +100,7 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
   }),
 
   Composer.on<PEContext, 'text'>('text', async (ctx) => {
-    ctx.scene.session.surname = ctx.message.text
+    ctx.scene.session.application.surname = ctx.message.text
 
     await ctx.reply(phrases.register.enterGroup__html(), { parse_mode: 'HTML' })
 
@@ -106,7 +108,7 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
   }),
 
   Composer.on<PEContext, 'text'>('text', async (ctx) => {
-    ctx.scene.session.groupCode = ctx.message.text
+    ctx.scene.session.application.groupCode = ctx.message.text
 
     await ctx.reply(phrases.register.enterVaccine())
 
@@ -114,7 +116,7 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
   }),
 
   async (ctx) => {
-    ctx.scene.session.vaccineMessageId = ctx.message.message_id
+    ctx.scene.session.application.vaccineMessageId = ctx.message.message_id
 
     await ctx.reply(phrases.register.confirm.text(), {
       reply_markup: Markup.inlineKeyboard([

@@ -3,6 +3,7 @@ import phrases from '../helpers/strings'
 import { PEContext } from '../types/custom-context'
 
 const middleware: Middleware<PEContext> = async (ctx, next) => {
+  console.log(ctx.chat.id, ctx.config.telegram.adminChatId)
   if (ctx.chat.id === ctx.config.telegram.adminChatId) {
     return next()
   }

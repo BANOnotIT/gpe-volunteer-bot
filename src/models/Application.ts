@@ -21,10 +21,10 @@ export class Application {
   @Column()
   groupCode: string
 
-  @Column({ default: false })
-  approved: boolean
+  @Column({ nullable: true })
+  approved: boolean | null
 
-  @ManyToOne(() => Event, (event) => event.applications)
+  @ManyToOne(() => Event, (event) => event.applications, { eager: true })
   event: Event
 
   represent() {
