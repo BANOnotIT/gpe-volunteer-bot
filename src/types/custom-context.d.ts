@@ -7,6 +7,7 @@ export interface SceneSession extends WizardSessionData {
   midname?: string
   surname?: string
   eventId?: Event['id']
+  groupCode?: string
   vaccineMessageId?: number
 }
 

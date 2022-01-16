@@ -71,6 +71,7 @@ const strings = {
     enterMidname: 'Введи своё отчество',
     enterSurname: 'Введи свою фамилию',
     // TODO надо более правильную формулировку
+    enterGroup__html: 'Укажи индекс своей группы (пример: <code>ИУ7-11Б</code>)',
     enterVaccine: 'Приложи сертификат о вакцинации',
     confirm: {
       text: 'Данные верны?',

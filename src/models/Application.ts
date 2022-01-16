@@ -18,6 +18,9 @@ export class Application {
   @Column()
   surname: string
 
+  @Column()
+  groupCode: string
+
   @Column({ default: false })
   approved: boolean
 
@@ -25,6 +28,6 @@ export class Application {
   event: Event
 
   represent() {
-    return `${this.firstname} ${this.midname} ${this.surname}`
+    return `${this.firstname} ${this.midname} ${this.surname} (${this.groupCode})`
   }
 }
