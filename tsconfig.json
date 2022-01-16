@@ -5,6 +5,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "esModuleInterop": true,
+    "typeRoots": ["./src/types/*"]
   },
   "include": ["src/**/*"]
 }
