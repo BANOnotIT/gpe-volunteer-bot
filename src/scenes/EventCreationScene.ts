@@ -25,7 +25,7 @@ const finalStep = new Composer<PEContext>()
     return ctx.scene.enter(SCENE.DEFAULT)
   })
   .action('no', async (ctx) => {
-    await ctx.editMessageText(phrases.eventCreate.confirm.restart())
+    await ctx.editMessageText(phrases.common.confirm.restart())
     ctx.wizard.selectStep(0)
     return ctx.scene.reenter()
   })
@@ -73,10 +73,10 @@ export const EventCreationScene = new Scenes.WizardScene<PEContext>(
   Composer.on<PEContext, 'text'>('text', async (ctx) => {
     ctx.scene.session.event.description = ctx.message.text
 
-    await ctx.reply(phrases.eventCreate.confirm.text(), {
+    await ctx.reply(phrases.common.confirm.text(), {
       reply_markup: Markup.inlineKeyboard([
-        Markup.button.callback(phrases.eventCreate.confirm.yes(), 'yes'),
-        Markup.button.callback(phrases.eventCreate.confirm.no(), 'no')
+        Markup.button.callback(phrases.common.confirm.yes(), 'yes'),
+        Markup.button.callback(phrases.common.confirm.no(), 'no')
       ]).reply_markup
     })
 

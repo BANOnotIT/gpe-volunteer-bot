@@ -8,6 +8,8 @@ import { Application } from '../models/Application'
 
 export const AdminMainScene = new Scenes.BaseScene<PEContext>(SCENE.ADMIN_MAIN)
   .command('add', checkUserIsAdmin, (ctx) => ctx.scene.enter(SCENE.CREATE_EVENT))
+  .command('edit', checkUserIsAdmin, (ctx) => ctx.scene.enter(SCENE.EDIT_EVENT))
+  .command('list', checkUserIsAdmin, (ctx) => ctx.scene.enter(SCENE.LIST_USERS))
   .action(/^approve#(\d+)$/, async (ctx) => {
     const appRepo = getRepository(Application)
     const application = await appRepo.findOne(ctx.match[1], { loadEagerRelations: true })
