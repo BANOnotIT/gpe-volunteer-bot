@@ -56,7 +56,9 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
       .where('event.status <> :status', { status: EventState.closed })
       .getMany()
 
-    const eventButtons = events.map((event) => [Markup.button.callback(event.represent(), `event#${event.id}`)])
+    const eventButtons = events
+      .map((event) => [Markup.button.callback(event.represent(), `event#${event.id}`)])
+      .concat([[Markup.button.callback(phrases.common.backBtn(), 'back')]])
     await ctx.reply(phrases.register.choseEvent(), Markup.inlineKeyboard(eventButtons))
 
     ctx.scene.session.application = {}
@@ -127,5 +129,5 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
 
     return ctx.wizard.next()
   },
-  finalStep
-)
+  finalStep,
+).action('back', (ctx) => ctx.scene.enter(SCENE.USER_MAIN))
