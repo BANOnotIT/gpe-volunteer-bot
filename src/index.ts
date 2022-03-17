@@ -18,7 +18,7 @@ async function setupDb(): Promise<Connection> {
     type: 'postgres',
     url: config.database.connection,
     synchronize: true,
-    entities: [Application, Event]
+    entities: [Application, Event],
   })
 }
 
@@ -41,12 +41,12 @@ async function setupBot() {
     await bot.telegram.setWebhook(webhook.href)
     webhookConfig = {
       port: +config.server.port,
-      hookPath: webhook.pathname
+      hookPath: webhook.pathname,
     }
   }
 
   await bot.launch({
-    webhook: webhookConfig
+    webhook: webhookConfig,
   })
   if (webhookConfig) debug('Bot started with WebHook on ' + config.telegram.webhook)
   else debug('Bot started with longpoll')

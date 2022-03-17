@@ -45,7 +45,7 @@
     "arrowParens": "always",
     "tabWidth": 2,
     "semi": false,
-    "trailingComma": "none"
+    "trailingComma": "all"
   },
   "engines": {
     "node": "^14.0.0",

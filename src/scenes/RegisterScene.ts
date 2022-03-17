@@ -32,8 +32,8 @@ const finalStep = new Composer<PEContext>()
       parse_mode: 'HTML',
       reply_markup: Markup.inlineKeyboard([
         Markup.button.callback(phrases.approve.approveBtn(), `approve#${application.id}`),
-        Markup.button.callback(phrases.approve.denyBtn(), `deny#${application.id}`)
-      ]).reply_markup
+        Markup.button.callback(phrases.approve.denyBtn(), `deny#${application.id}`),
+      ]).reply_markup,
     })
 
     await ctx.editMessageText(phrases.register.final())
@@ -76,7 +76,7 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
     }
 
     await ctx.editMessageText(
-      phrases.register.choseEventChosen({ event: event.represent(), description: event.description })
+      phrases.register.choseEventChosen({ event: event.represent(), description: event.description }),
     )
 
     await ctx.reply(phrases.register.enterName())
@@ -121,8 +121,8 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
     await ctx.reply(phrases.common.confirm.text(), {
       reply_markup: Markup.inlineKeyboard([
         Markup.button.callback(phrases.common.confirm.yes(), 'yes'),
-        Markup.button.callback(phrases.common.confirm.no(), 'no')
-      ]).reply_markup
+        Markup.button.callback(phrases.common.confirm.no(), 'no'),
+      ]).reply_markup,
     })
 
     return ctx.wizard.next()

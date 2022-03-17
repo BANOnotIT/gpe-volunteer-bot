@@ -41,5 +41,5 @@ export const MembersListScene = new Scenes.WizardScene<PEContext>(
     await ctx.reply(users.join('\n'))
 
     return ctx.scene.enter(SCENE.DEFAULT)
-  })
+  }),
 )

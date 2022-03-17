@@ -83,8 +83,8 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     await ctx.reply(
       `${format(
         event.start instanceof Date ? event.start : parse(event.start, 'H:mm:ss', new Date()),
-        timeFormat
-      )}-${format(event.end instanceof Date ? event.end : parse(event.end, 'H:mm:ss', new Date()), timeFormat)}`
+        timeFormat,
+      )}-${format(event.end instanceof Date ? event.end : parse(event.end, 'H:mm:ss', new Date()), timeFormat)}`,
     )
 
     return ctx.wizard.next()
@@ -98,7 +98,7 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     if (text !== '+') {
       if (!/^\d{1,2}:\d{2}-\d{1,2}:\d{2}$/.test(text)) {
         return ctx.editMessageText(phrases.eventEdit.wrongFormat__html({ format: 'чч:мм-чч:мм' }), {
-          parse_mode: 'HTML'
+          parse_mode: 'HTML',
         })
       }
       const [start, end] = text.split('-')
@@ -125,11 +125,11 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     const btns = {
       [EventState.open]: 'Открыто',
       [EventState.additional]: 'Добор',
-      [EventState.closed]: 'Закрыто'
+      [EventState.closed]: 'Закрыто',
     }
 
     const eventButtons = Object.entries(btns).map(([state, text]) => [
-      Markup.button.callback(event.status === state ? `${WHITE_QUESTION_MARK} ${text}` : text, `state#${state}`)
+      Markup.button.callback(event.status === state ? `${WHITE_QUESTION_MARK} ${text}` : text, `state#${state}`),
     ])
     console.log(eventButtons)
     await ctx.reply(phrases.eventEdit.choseEvent(), Markup.inlineKeyboard(eventButtons))
@@ -145,18 +145,18 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     const btns = {
       [EventState.open]: 'Открыто',
       [EventState.additional]: 'Добор',
-      [EventState.closed]: 'Закрыто'
+      [EventState.closed]: 'Закрыто',
     }
     await ctx.editMessageText(phrases.eventEdit.choseStatusChosen({ status: btns[status] }))
 
     await ctx.reply(phrases.common.confirm.text(), {
       reply_markup: Markup.inlineKeyboard([
         Markup.button.callback(phrases.common.confirm.yes(), 'yes'),
-        Markup.button.callback(phrases.common.confirm.no(), 'no')
-      ]).reply_markup
+        Markup.button.callback(phrases.common.confirm.no(), 'no'),
+      ]).reply_markup,
     })
 
     return ctx.wizard.next()
   }),
-  finalStep
+  finalStep,
 )

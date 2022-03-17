@@ -23,7 +23,7 @@ export const AdminMainScene = new Scenes.BaseScene<PEContext>(SCENE.ADMIN_MAIN)
 
     const event = await application.event
     await ctx.editMessageText(
-      phrases.approve.resolution.approved__html({ user: application.represent(), date: event.represent() })
+      phrases.approve.resolution.approved__html({ user: application.represent(), date: event.represent() }),
     )
     await ctx.telegram.sendMessage(application.tgId, phrases.approve.notice.approved({ date: event.represent() }))
   })
@@ -40,17 +40,18 @@ export const AdminMainScene = new Scenes.BaseScene<PEContext>(SCENE.ADMIN_MAIN)
 
     const event = await application.event
     await ctx.editMessageText(
-      phrases.approve.resolution.denied__html({ user: application.represent(), date: event.represent() })
+      phrases.approve.resolution.denied__html({ user: application.represent(), date: event.represent() }),
     )
     await ctx.telegram.sendMessage(application.tgId, phrases.approve.notice.denied({ date: event.represent() }))
   })
   .hears(phrases.admin.btns.create(), checkUserIsAdmin, (ctx) => ctx.scene.enter(SCENE.CREATE_EVENT))
   .use(replyWithMainView)
+  .enter(replyWithMainView)
 
 async function replyWithMainView(ctx: PEContext) {
   const keyboard = Markup.keyboard([
     // Markup.button.text(phrases.user.btns.info()),
-    Markup.button.text(phrases.admin.btns.create())
+    Markup.button.text(phrases.admin.btns.create()),
   ])
     .resize(true)
     .oneTime(true)

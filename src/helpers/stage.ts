@@ -14,8 +14,8 @@ export function setupStage(bot: Telegraf<PEContext>) {
   const stage = new Scenes.Stage<PEContext>(
     [main, RegisterScene, UserMainScene, EventEditScene, EventCreationScene, AdminMainScene, MembersListScene],
     {
-      default: SCENE.DEFAULT
-    }
+      default: SCENE.DEFAULT,
+    },
   )
 
   bot.use(stage.middleware())

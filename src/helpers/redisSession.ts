@@ -14,7 +14,7 @@ export async function bindSession(bot: Telegraf<PEContext>, redisUrl?: string) {
 
   const rsession = new TelegrafRedisSession({
     // @ts-ignore -- because redis doesn't require host and port if url is specified
-    store: { url: redisUrl }
+    store: { url: redisUrl },
   })
 
   const asyncRedis = bluebird.promisifyAll(rsession.client)

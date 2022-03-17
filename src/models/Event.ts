@@ -4,7 +4,7 @@ import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
 export enum EventState {
   open = 'open',
   additional = 'additional',
-  closed = 'closed'
+  closed = 'closed',
 }
 
 @Entity()

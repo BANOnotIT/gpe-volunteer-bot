@@ -57,7 +57,7 @@ export const EventCreationScene = new Scenes.WizardScene<PEContext>(
     let text = ctx.message.text
     if (!/^\d{1,2}:\d{2}-\d{1,2}:\d{2}$/.test(text)) {
       return ctx.editMessageText(phrases.eventCreate.wrongFormat__html({ format: 'чч:мм-чч:мм' }), {
-        parse_mode: 'HTML'
+        parse_mode: 'HTML',
       })
     }
     const [start, end] = text.split('-')
@@ -76,11 +76,11 @@ export const EventCreationScene = new Scenes.WizardScene<PEContext>(
     await ctx.reply(phrases.common.confirm.text(), {
       reply_markup: Markup.inlineKeyboard([
         Markup.button.callback(phrases.common.confirm.yes(), 'yes'),
-        Markup.button.callback(phrases.common.confirm.no(), 'no')
-      ]).reply_markup
+        Markup.button.callback(phrases.common.confirm.no(), 'no'),
+      ]).reply_markup,
     })
 
     return ctx.wizard.next()
   }),
-  finalStep
+  finalStep,
 )
