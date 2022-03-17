@@ -1,0 +1,4 @@
+.idea/
+config/local*
+node_modules/
+README.adoc
