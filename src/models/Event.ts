@@ -32,7 +32,9 @@ export class Event {
   applications: Application[]
 
   represent() {
-    let repr = `${this.date} ${this.start}-${this.end}`
+    let timeInterval = `${this.start}-${this.end}`
+    let date = new Date(this.date).toLocaleDateString()
+    let repr = `${timeInterval} ${date}`
     switch (this.status) {
       case EventState.additional:
         repr += ` (добор)`
