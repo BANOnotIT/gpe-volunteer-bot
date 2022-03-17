@@ -6,7 +6,7 @@ const scene = new Scenes.BaseScene<PEContext>(SCENE.DEFAULT)
 scene.command('info', (ctx) => ctx.reply(`chat id: ${ctx.chat.id}`)).use(replyWithMainView)
 
 async function replyWithMainView(ctx: PEContext) {
-  if (ctx.chat.id !== ctx.config.telegram.adminChatId) {
+  if (String(ctx.chat.id) !== String(ctx.config.telegram.adminChatId)) {
     return ctx.scene.enter(SCENE.USER_MAIN)
   } else {
     return ctx.scene.enter(SCENE.ADMIN_MAIN)
