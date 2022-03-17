@@ -18,5 +18,6 @@ COPY package.json yarn.lock ./
 RUN yarn install --prod
 COPY --from=build /app/dist/ /app/dist/
 COPY files /app/files
+COPY config /app/config
 
 CMD ["yarn", "start"]
