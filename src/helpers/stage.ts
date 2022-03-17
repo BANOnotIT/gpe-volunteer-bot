@@ -8,11 +8,21 @@ import { EventCreationScene } from '../scenes/EventCreationScene'
 import { AdminMainScene } from '../scenes/AdminMainScene'
 import { EventEditScene } from '../scenes/EventEditScene'
 import { MembersListScene } from '../scenes/MembersListScene'
+import { ProfessionsScene } from '../scenes/ProfessionsScene'
 const debug = require('debug')('bot:stage')
 
 export function setupStage(bot: Telegraf<PEContext>) {
   const stage = new Scenes.Stage<PEContext>(
-    [main, RegisterScene, UserMainScene, EventEditScene, EventCreationScene, AdminMainScene, MembersListScene],
+    [
+      main,
+      RegisterScene,
+      UserMainScene,
+      EventEditScene,
+      EventCreationScene,
+      AdminMainScene,
+      MembersListScene,
+      ProfessionsScene,
+    ],
     {
       default: SCENE.DEFAULT,
     },
