@@ -94,7 +94,7 @@ const strings = {
   },
   register: {
     choseEvent: 'Выбери на какое записываешься?',
-    choseEventEmpty:'К сожалению, сейчас нет мероприятий для записи',
+    choseEventEmpty: 'К сожалению, сейчас нет мероприятий для записи',
     choseEventChosen: 'Выбери на какое записываешься?\n{event}\n\n{description}',
     enterName: 'Введи своё имя',
     enterMidname: 'Введи своё отчество',
