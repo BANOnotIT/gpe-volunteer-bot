@@ -56,6 +56,12 @@ export const RegisterScene = new Scenes.WizardScene<PEContext>(
       .where('event.status <> :status', { status: EventState.closed })
       .getMany()
 
+    if (events.length === 0) {
+      await ctx.reply(phrases.register.choseEventEmpty())
+      await ctx.scene.enter(SCENE.USER_MAIN)
+      return
+    }
+
     const eventButtons = events
       .map((event) => [Markup.button.callback(event.represent(), `event#${event.id}`)])
       .concat([[Markup.button.callback(phrases.common.backBtn(), 'back')]])
