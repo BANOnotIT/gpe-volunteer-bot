@@ -14,7 +14,6 @@ const finalStep = new Composer<PEContext>()
     let form = ctx.scene.session.event
     const event = await eventRepo.findOneOrFail(form.eventId)
 
-    if (form.date) event.date = form.date
     if (form.startTime) event.start = form.startTime
     if (form.endTime) event.end = form.endTime
     if (form.description) event.description = form.description
@@ -68,36 +67,7 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     await ctx.editMessageText(phrases.eventEdit.choseEventChosen({ event: event.represent() }))
 
     await ctx.reply(phrases.eventEdit.enterDate())
-    await ctx.reply(format(new Date(event.start), 'd.L.yy'))
-    return ctx.wizard.next()
-  }),
-
-  Composer.on<PEContext, 'text'>('text', async (ctx) => {
-    const eventRepo = getRepository(Event)
-    const event = await eventRepo.findOne(ctx.scene.session.event.eventId)
-    let text = ctx.message.text
-
-    if (text !== '+') {
-      if (!/^\d{1,2}.\d{2}.\d{2}$/.test(text)) {
-        return ctx.editMessageText(phrases.eventEdit.wrongFormat__html({ format: 'дд.мм.гг' }), { parse_mode: 'HTML' })
-      }
-
-      ctx.scene.session.event.date = parse(text, 'd.L.yy', new Date())
-    }
-
-    await ctx.reply(phrases.eventEdit.enterTimeSpan())
-    await ctx.reply(
-      `${format(
-        event.start instanceof Date
-          ? event.start
-          : parse(event.start, 'H:mm:ss', new Date(ctx.scene.session.event.date)),
-        timeFormat,
-      )}-${format(
-        event.end instanceof Date ? event.end : parse(event.end, 'H:mm:ss', new Date(ctx.scene.session.event.date)),
-        timeFormat,
-      )}`,
-    )
-
+    await ctx.reply(`${format(event.start, 'H:mm')}-${format(event.end, 'H:mm d.L.yy')}`)
     return ctx.wizard.next()
   }),
 
@@ -107,15 +77,15 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     const event = await eventRepo.findOneOrFail(ctx.scene.session.event.eventId)
 
     if (text !== '+') {
-      if (!/^\d{1,2}:\d{2}-\d{1,2}:\d{2}$/.test(text)) {
+      if (!/^\d{1,2}:\d{2}-\d{1,2}:\d{2} \d{1,2}\.\d{2}\.\d{2}$/.test(text)) {
         return ctx.editMessageText(phrases.eventEdit.wrongFormat__html({ format: 'чч:мм-чч:мм' }), {
           parse_mode: 'HTML',
         })
       }
       const [start, end] = text.split('-')
 
-      ctx.scene.session.event.startTime = parse(start, timeFormat, new Date(ctx.scene.session.event.date))
-      ctx.scene.session.event.endTime = parse(end, timeFormat, new Date(ctx.scene.session.event.date))
+      ctx.scene.session.event.endTime = parse(end, 'H:mm d.L.yy', new Date(ctx.scene.session.event.endTime))
+      ctx.scene.session.event.startTime = parse(start, 'H:mm', new Date(ctx.scene.session.event.endTime))
     }
 
     await ctx.reply(phrases.eventEdit.enterDescription())

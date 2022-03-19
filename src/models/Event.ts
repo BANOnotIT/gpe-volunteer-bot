@@ -31,7 +31,7 @@ export class Event {
   applications: Application[]
 
   represent() {
-    let timeInterval = `${format(this.start, 'HH:mm')}-${(format(this.end), 'HH:mm')}`
+    let timeInterval = `${format(this.start, 'HH:mm')}-${format(this.end, 'HH:mm')}`
     let date = new Date(this.start).toLocaleDateString()
     let repr = `${timeInterval} ${date}`
     switch (this.status) {
