@@ -50,7 +50,7 @@ export const EventCreationScene = new Scenes.WizardScene<PEContext>(
       ctx.scene.session.event.startTime = start
       ctx.scene.session.event.endTime = end
     } catch (e) {
-      return ctx.editMessageText(phrases.eventCreate.wrongFormat__html({ error: e.message }), {
+      return ctx.reply(phrases.eventCreate.wrongFormat__html({ error: e.message }), {
         parse_mode: 'HTML',
       })
     }
