@@ -40,6 +40,12 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     const eventRepo = getRepository(Event)
     const events = await eventRepo.createQueryBuilder('event').addOrderBy('event.date', 'ASC').getMany()
 
+    if (events.length === 0) {
+      await ctx.reply(phrases.register.choseEventEmpty())
+      await ctx.scene.enter(SCENE.USER_MAIN)
+      return
+    }
+
     const eventButtons = events.map((event) => [Markup.button.callback(event.represent(), `event#${event.id}`)])
     await ctx.reply(phrases.eventEdit.choseEvent(), Markup.inlineKeyboard(eventButtons))
 
