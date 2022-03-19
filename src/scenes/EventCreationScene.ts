@@ -66,7 +66,7 @@ export const EventCreationScene = new Scenes.WizardScene<PEContext>(
     ctx.scene.session.event.startTime = parse(start, 'H:mm', new Date(ctx.scene.session.event.date))
     ctx.scene.session.event.endTime = parse(end, 'H:mm', new Date(ctx.scene.session.event.date))
 
-console.log(ctx.scene.session.event.startTime)
+    console.log(ctx.scene.session.event.startTime)
 
     await ctx.reply(phrases.eventCreate.enterDescription())
 

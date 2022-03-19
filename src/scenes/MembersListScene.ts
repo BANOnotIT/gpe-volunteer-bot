@@ -11,7 +11,7 @@ export const MembersListScene = new Scenes.WizardScene<PEContext>(
 
   async (ctx) => {
     const eventRepo = getRepository(Event)
-    const events = await eventRepo.createQueryBuilder('event').addOrderBy('event.date', 'ASC').getMany()
+    const events = await eventRepo.createQueryBuilder('event').addOrderBy('event.start', 'ASC').getMany()
 
     if (events.length === 0) {
       await ctx.reply(phrases.register.choseEventEmpty())
