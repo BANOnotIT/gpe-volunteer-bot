@@ -9,6 +9,7 @@ import { BotConfig } from 'bot-config'
 import { PEContext } from './types/custom-context'
 import { Application } from './models/Application'
 import { Event } from './models/Event'
+import { SCENE } from './const/sceneId'
 
 const config = require('config') as BotConfig
 const debug = require('debug')('bot')
@@ -44,6 +45,8 @@ async function setupBot() {
       hookPath: webhook.pathname,
     }
   }
+
+  bot.command('restart', (ctx) => ctx.scene.enter(SCENE.DEFAULT))
 
   await bot.launch({
     webhook: webhookConfig,
