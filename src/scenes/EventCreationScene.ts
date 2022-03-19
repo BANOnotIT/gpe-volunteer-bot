@@ -35,7 +35,7 @@ export const EventCreationScene = new Scenes.WizardScene<PEContext>(
   async (ctx) => {
     ctx.scene.session.event = {}
 
-    await ctx.reply(phrases.eventCreate.enterTimeSpan__html({ format: humanFormat }))
+    await ctx.reply(phrases.eventCreate.enterTimeSpan__html({ format: humanFormat }), Markup.removeKeyboard())
     return ctx.wizard.next()
   },
 
