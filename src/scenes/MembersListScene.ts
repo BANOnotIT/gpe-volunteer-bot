@@ -42,6 +42,11 @@ export const MembersListScene = new Scenes.WizardScene<PEContext>(
       .addOrderBy('app.midname', 'ASC')
       .getMany()
 
+    if (applications.length === 0) {
+      await ctx.reply('Нет подтверждённых участников')
+      return ctx.scene.enter(SCENE.DEFAULT)
+    }
+
     const users = applications.map((app) => app.represent())
     await ctx.reply(users.join(', '))
     await ctx.reply(users.join('\n'))
