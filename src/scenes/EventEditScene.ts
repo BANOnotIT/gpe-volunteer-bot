@@ -4,8 +4,8 @@ import { Event, EventState } from '../models/Event'
 import { SCENE } from '../const/sceneId'
 import { PEContext } from '../types/custom-context'
 import { getRepository } from 'typeorm'
-import { format, parse } from 'date-fns'
 import { WHITE_QUESTION_MARK } from '../const/emojies'
+import { parseInterval, stringifyInterval } from '../helpers/interval'
 
 const finalStep = new Composer<PEContext>()
   .action('yes', async (ctx) => {
@@ -31,7 +31,6 @@ const finalStep = new Composer<PEContext>()
     return ctx.scene.reenter()
   })
 
-const timeFormat = 'H:mm'
 export const EventEditScene = new Scenes.WizardScene<PEContext>(
   SCENE.EDIT_EVENT,
 
@@ -67,7 +66,7 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     await ctx.editMessageText(phrases.eventEdit.choseEventChosen({ event: event.represent() }))
 
     await ctx.reply(phrases.eventEdit.enterDate())
-    await ctx.reply(`${format(event.start, 'H:mm')}-${format(event.end, 'H:mm d.L.yy')}`)
+    await ctx.reply(stringifyInterval(event.start, event.end))
     return ctx.wizard.next()
   }),
 
@@ -77,15 +76,15 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     const event = await eventRepo.findOneOrFail(ctx.scene.session.event.eventId)
 
     if (text !== '+') {
-      if (!/^\d{1,2}:\d{2}-\d{1,2}:\d{2} \d{1,2}\.\d{2}\.\d{2}$/.test(text)) {
-        return ctx.editMessageText(phrases.eventEdit.wrongFormat__html({ format: 'чч:мм-чч:мм' }), {
+      try {
+        const [start, end] = parseInterval(text)
+        ctx.scene.session.event.startTime = start
+        ctx.scene.session.event.endTime = end
+      } catch (e) {
+        return ctx.editMessageText(phrases.eventEdit.wrongFormat__html({ error: e.message }), {
           parse_mode: 'HTML',
         })
       }
-      const [start, end] = text.split('-')
-
-      ctx.scene.session.event.endTime = parse(end, 'H:mm d.L.yy', new Date(ctx.scene.session.event.endTime))
-      ctx.scene.session.event.startTime = parse(start, 'H:mm', new Date(ctx.scene.session.event.endTime))
     }
 
     await ctx.reply(phrases.eventEdit.enterDescription())
@@ -112,7 +111,7 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     const eventButtons = Object.entries(btns).map(([state, text]) => [
       Markup.button.callback(event.status === state ? `${WHITE_QUESTION_MARK} ${text}` : text, `state#${state}`),
     ])
-    console.log(eventButtons)
+
     await ctx.reply(phrases.eventEdit.choseEvent(), Markup.inlineKeyboard(eventButtons))
 
     return ctx.wizard.next()

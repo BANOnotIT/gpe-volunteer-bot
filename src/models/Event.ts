@@ -1,6 +1,6 @@
 import { Application } from './Application'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
-import { format } from 'date-fns'
+import { stringifyInterval } from '../helpers/interval'
 
 export enum EventState {
   open = 'open',
@@ -31,9 +31,8 @@ export class Event {
   applications: Application[]
 
   represent() {
-    let timeInterval = `${format(this.start, 'HH:mm')}-${format(this.end, 'HH:mm')}`
-    let date = new Date(this.start).toLocaleDateString()
-    let repr = `${timeInterval} ${date}`
+    let repr = stringifyInterval(this.start, this.end)
+
     switch (this.status) {
       case EventState.additional:
         repr += ` (добор)`

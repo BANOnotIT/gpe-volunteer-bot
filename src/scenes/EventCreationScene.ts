@@ -4,7 +4,7 @@ import { Event, EventState } from '../models/Event'
 import { SCENE } from '../const/sceneId'
 import { PEContext } from '../types/custom-context'
 import { getRepository } from 'typeorm'
-import { parse } from 'date-fns'
+import { humanFormat, parseInterval } from '../helpers/interval'
 
 const finalStep = new Composer<PEContext>()
   .action('yes', async (ctx) => {
@@ -35,38 +35,22 @@ export const EventCreationScene = new Scenes.WizardScene<PEContext>(
   async (ctx) => {
     ctx.scene.session.event = {}
 
-    await ctx.reply(phrases.eventCreate.enterDate())
+    await ctx.reply(phrases.eventCreate.enterTimeSpan__html({ format: humanFormat }))
     return ctx.wizard.next()
   },
 
   Composer.on<PEContext, 'text'>('text', async (ctx) => {
     let text = ctx.message.text
-    if (!/^\d{1,2}.\d{2}.\d{2}$/.test(text)) {
-      return ctx.editMessageText(phrases.eventCreate.wrongFormat__html({ format: 'дд.мм.гг' }), { parse_mode: 'HTML' })
-    }
 
-    ctx.scene.session.event.date = parse(text, 'd.L.yy', new Date())
-
-    await ctx.reply(phrases.eventCreate.enterTimeSpan__html({ format: 'чч:мм-чч:мм' }), { parse_mode: 'HTML' })
-
-    return ctx.wizard.next()
-  }),
-
-  Composer.on<PEContext, 'text'>('text', async (ctx) => {
-    let text = ctx.message.text
-    if (!/^\d{1,2}:\d{2}-\d{1,2}:\d{2}$/.test(text)) {
-      return ctx.editMessageText(phrases.eventCreate.wrongFormat__html({ format: 'чч:мм-чч:мм' }), {
+    try {
+      const [start, end] = parseInterval(text)
+      ctx.scene.session.event.startTime = start
+      ctx.scene.session.event.endTime = end
+    } catch (e) {
+      return ctx.editMessageText(phrases.eventCreate.wrongFormat__html({ error: e.message }), {
         parse_mode: 'HTML',
       })
     }
-    const [start, end] = text.split('-')
-
-    console.log(ctx.scene.session.event.date)
-
-    ctx.scene.session.event.startTime = parse(start, 'H:mm', new Date(ctx.scene.session.event.date))
-    ctx.scene.session.event.endTime = parse(end, 'H:mm', new Date(ctx.scene.session.event.date))
-
-    console.log(ctx.scene.session.event.startTime)
 
     await ctx.reply(phrases.eventCreate.enterDescription())
 

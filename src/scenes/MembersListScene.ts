@@ -6,6 +6,8 @@ import { PEContext } from '../types/custom-context'
 import { getRepository } from 'typeorm'
 import { Application } from '../models/Application'
 
+const scenePhrases = phrases.membersList
+
 export const MembersListScene = new Scenes.WizardScene<PEContext>(
   SCENE.LIST_USERS,
 
@@ -20,7 +22,7 @@ export const MembersListScene = new Scenes.WizardScene<PEContext>(
     }
 
     const eventButtons = events.map((event) => [Markup.button.callback(event.represent(), `event#${event.id}`)])
-    await ctx.reply('Список участников какого мероприятия выдать?', Markup.inlineKeyboard(eventButtons))
+    await ctx.reply(scenePhrases.selectEvent(), Markup.inlineKeyboard(eventButtons))
 
     ctx.scene.session.event = {}
 
@@ -43,7 +45,7 @@ export const MembersListScene = new Scenes.WizardScene<PEContext>(
       .getMany()
 
     if (applications.length === 0) {
-      await ctx.reply('Нет подтверждённых участников')
+      await ctx.reply(scenePhrases.emptyEvent())
       return ctx.scene.enter(SCENE.DEFAULT)
     }
 
