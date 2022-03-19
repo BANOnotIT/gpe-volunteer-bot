@@ -42,7 +42,7 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
 
     if (events.length === 0) {
       await ctx.reply(phrases.register.choseEventEmpty())
-      await ctx.scene.enter(SCENE.USER_MAIN)
+      await ctx.scene.enter(SCENE.ADMIN_MAIN)
       return
     }
 
