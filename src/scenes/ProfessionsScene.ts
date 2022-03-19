@@ -8,6 +8,7 @@ const sceneKeyboard = Markup.keyboard([
   [
     Markup.button.text(phrases.professions.ballHandler.categoryBtn()),
     Markup.button.text(phrases.professions.cleaner.categoryBtn()),
+    Markup.button.text(phrases.professions.advertisers.categoryBtn()),
   ],
   [Markup.button.text(phrases.common.backBtn())],
 ])
@@ -34,6 +35,12 @@ export const ProfessionsScene = new Scenes.BaseScene<PEContext>(SCENE.PROFESSION
       Markup.button.callback(currentPhrases.examplesBtn(), VideoExamplesActions.cleaner),
     ])
     await ctx.reply(currentPhrases.rules__html(), { parse_mode: 'HTML', reply_markup: videoKeyboard.reply_markup })
+    return next()
+  })
+  .hears(phrases.professions.advertisers.categoryBtn(), async (ctx, next) => {
+    const currentPhrases = phrases.professions.advertisers
+
+    await ctx.reply(currentPhrases.rules__html(), { parse_mode: 'HTML' })
     return next()
   })
   .hears(phrases.common.backBtn(), async (ctx) => ctx.scene.enter(SCENE.USER_MAIN))
