@@ -27,7 +27,7 @@ export function parseInterval(input: string): [Date, Date] {
   const start = parse(startDateStr, 'd.L.yy H:mm', new Date())
   const end = parse(endTimeStr, 'H:mm', start)
 
-  if (!isAfter(start, end)) {
+  if (!isAfter(end, start)) {
     throw new InvalidIntervalDirectionError()
   }
 
