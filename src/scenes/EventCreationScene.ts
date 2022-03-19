@@ -12,7 +12,6 @@ const finalStep = new Composer<PEContext>()
 
     const event = new Event()
     event.createdAt = new Date()
-    event.date = ctx.scene.session.event.date
     event.start = ctx.scene.session.event.startTime
     event.end = ctx.scene.session.event.endTime
     event.description = ctx.scene.session.event.description
@@ -62,8 +61,8 @@ export const EventCreationScene = new Scenes.WizardScene<PEContext>(
     }
     const [start, end] = text.split('-')
 
-    ctx.scene.session.event.startTime = parse(start, 'H:mm', 0)
-    ctx.scene.session.event.endTime = parse(end, 'H:mm', 0)
+    ctx.scene.session.event.startTime = parse(start, 'H:mm', ctx.scene.session.event.date)
+    ctx.scene.session.event.endTime = parse(end, 'H:mm', ctx.scene.session.event.date)
 
     await ctx.reply(phrases.eventCreate.enterDescription())
 

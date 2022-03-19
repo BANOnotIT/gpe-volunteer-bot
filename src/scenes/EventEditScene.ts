@@ -68,7 +68,7 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     await ctx.editMessageText(phrases.eventEdit.choseEventChosen({ event: event.represent() }))
 
     await ctx.reply(phrases.eventEdit.enterDate())
-    await ctx.reply(format(new Date(event.date), 'd.L.yy'))
+    await ctx.reply(format(new Date(event.start), 'd.L.yy'))
     return ctx.wizard.next()
   }),
 
@@ -88,9 +88,14 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
     await ctx.reply(phrases.eventEdit.enterTimeSpan())
     await ctx.reply(
       `${format(
-        event.start instanceof Date ? event.start : parse(event.start, 'H:mm:ss', new Date()),
+        event.start instanceof Date
+          ? event.start
+          : parse(event.start, 'H:mm:ss', new Date(ctx.scene.session.event.date)),
         timeFormat,
-      )}-${format(event.end instanceof Date ? event.end : parse(event.end, 'H:mm:ss', new Date()), timeFormat)}`,
+      )}-${format(
+        event.end instanceof Date ? event.end : parse(event.end, 'H:mm:ss', new Date(ctx.scene.session.event.date)),
+        timeFormat,
+      )}`,
     )
 
     return ctx.wizard.next()
@@ -109,8 +114,8 @@ export const EventEditScene = new Scenes.WizardScene<PEContext>(
       }
       const [start, end] = text.split('-')
 
-      ctx.scene.session.event.startTime = parse(start, timeFormat, 0)
-      ctx.scene.session.event.endTime = parse(end, timeFormat, 0)
+      ctx.scene.session.event.startTime = parse(start, timeFormat, new Date(ctx.scene.session.event.date))
+      ctx.scene.session.event.endTime = parse(end, timeFormat, new Date(ctx.scene.session.event.date))
     }
 
     await ctx.reply(phrases.eventEdit.enterDescription())

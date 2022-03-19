@@ -1,5 +1,6 @@
 import { Application } from './Application'
 import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from 'typeorm'
+import { format } from 'date-fns'
 
 export enum EventState {
   open = 'open',
@@ -18,11 +19,9 @@ export class Event {
   @Column({ type: 'varchar' })
   status: EventState
 
-  @Column({ type: 'date' })
-  date: Date
-  @Column({ type: 'time' })
+  @Column({ type: 'timestamp' })
   start: Date
-  @Column({ type: 'time' })
+  @Column({ type: 'timestamp' })
   end: Date
 
   @Column({ type: 'text' })
@@ -32,8 +31,8 @@ export class Event {
   applications: Application[]
 
   represent() {
-    let timeInterval = `${this.start}-${this.end}`
-    let date = new Date(this.date).toLocaleDateString()
+    let timeInterval = `${format(this.start, 'HH:mm')}-${(format(this.end), 'HH:mm')}`
+    let date = new Date(this.start).toLocaleDateString()
     let repr = `${timeInterval} ${date}`
     switch (this.status) {
       case EventState.additional:
