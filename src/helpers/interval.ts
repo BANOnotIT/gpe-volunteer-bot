@@ -35,5 +35,5 @@ export function parseInterval(input: string): [Date, Date] {
 }
 
 export function stringifyInterval(start: Date, end: Date): string {
-  return `${format(start, 'd.L.yy HH:mm')}-${format(end, 'HH:mm')}`
+  return `${format(start, 'd.LL.yy HH:mm')}-${format(end, 'HH:mm')}`
 }
